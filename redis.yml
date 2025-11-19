@@ -1,0 +1,17 @@
+services:
+  redis:
+    image: redis
+    hostname: redis
+    volumes:
+      - /meower-data/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - meower
+    ports:
+      - target: 6379
+        published: 6379
+        mode: host
+
+networks:
+  meower:
+    name: meower
+    external: true

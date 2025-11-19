@@ -1,59 +1,24 @@
-version: '3.8'
-
 services:
-  us_west:
-    image: ghcr.io/meower-media/server:latest
-    hostname: server
+  server:
+    image: ghcr.io/meower-revived/server:latest
+    depends_on:
+      - db
+      - keydb
+    env_file:
+      - /meower-data/server/.env
     volumes:
       - /meower-data/server/.env:/app/.env:ro
     networks:
-      - server_us_west
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: any
-        delay: 5s
-        window: 120s
-      update_config:
-        parallelism: 1
-        delay: 10s
-        failure_action: pause
-        monitor: 10s
-        order: stop-first
-      placement:
-        constraints:
-          - node.labels.region == us_west
-          - node.labels.server == yes
-        preferences:
-          - spread: node.labels.zone
-
-  us_west_cf:
-    image: cloudflare/cloudflared
-    command: tunnel run
-    env_file: /meower-data/server/cf.env
-    networks:
-      - server_us_west
-    depends_on:
-      - us_west
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: any
-        delay: 5s
-        window: 120s
-      update_config:
-        parallelism: 1
-        delay: 10s
-        failure_action: pause
-        monitor: 10s
-        order: stop-first
-      placement:
-        constraints:
-          - node.labels.region == us_west
-          - node.labels.server == yes
-        preferences:
-          - spread: node.labels.zone
+      - meower
+    ports:
+      - target: 3000
+        published: 3000
+        mode: host
+      - target: 3001
+        published: 3001
+        mode: host
 
 networks:
-  server_us_west:
+  meower:
+    name: meower
     external: true

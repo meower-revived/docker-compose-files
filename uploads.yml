@@ -1,60 +1,14 @@
-version: '3.8'
-
 services:
-  us_west:
+  uploads:
     image: ghcr.io/meower-media/uploads:latest
     hostname: uploads
     volumes:
       - /meower-data/uploads/.env:/app/.env:ro
       - /meower-data/uploads/ingest:/app/ingest  # tmpfs for good performance
     networks:
-      - uploads_us_west
-    deploy:
-      replicas: 3
-      restart_policy:
-        condition: any
-        delay: 5s
-        window: 120s
-      update_config:
-        parallelism: 1
-        delay: 10s
-        failure_action: pause
-        monitor: 10s
-        order: stop-first
-      placement:
-        constraints:
-          - node.labels.region == us_west
-          - node.labels.uploads == yes
-        preferences:
-          - spread: node.id
-
-  us_west_cf:
-    image: cloudflare/cloudflared
-    command: tunnel run
-    env_file: /meower-data/uploads/cf.env
-    networks:
-      - uploads_us_west
-    depends_on:
-      - us_west
-    deploy:
-      replicas: 3
-      restart_policy:
-        condition: any
-        delay: 5s
-        window: 120s
-      update_config:
-        parallelism: 1
-        delay: 10s
-        failure_action: pause
-        monitor: 10s
-        order: stop-first
-      placement:
-        constraints:
-          - node.labels.region == us_west
-          - node.labels.uploads == yes
-        preferences:
-          - spread: node.id
+      - meower
 
 networks:
-  uploads_us_west:
+  meower:
+    name: meower
     external: true
