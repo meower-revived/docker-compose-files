@@ -1,9 +1,6 @@
 services:
   server:
     image: ghcr.io/meower-revived/server:latest
-    depends_on:
-      - db
-      - keydb
     env_file:
       - /meower-data/server/.env
     volumes:
