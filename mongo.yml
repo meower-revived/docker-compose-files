@@ -1,9 +1,11 @@
 services:
-  db:
+  mongo:
     image: mongo
     hostname: mongo
     env_file:
       - /meower-data/db/.env
+    volumes:
+      - /meower-data/mongo/data:/data/db
     networks:
       - meower
     ports:
