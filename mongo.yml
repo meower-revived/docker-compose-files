@@ -3,7 +3,7 @@ services:
     image: mongo
     hostname: mongo
     env_file:
-      - /meower-data/db/.env
+      - /meower-data/mongo/.env
     volumes:
       - /meower-data/mongo/data:/data/db
     networks:
