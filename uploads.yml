@@ -7,6 +7,10 @@ services:
       - /meower-data/uploads/ingest:/app/ingest  # tmpfs for good performance
     networks:
       - meower
+    ports:
+      - target: 3002
+        published: 3002
+        mode: host
 
 networks:
   meower:
