@@ -1,6 +1,6 @@
 services:
   uploads:
-    image: ghcr.io/meower-media/uploads:latest
+    image: ghcr.io/meower-revived/uploads:latest
     hostname: uploads
     volumes:
       - /meower-data/uploads/.env:/app/.env:ro
