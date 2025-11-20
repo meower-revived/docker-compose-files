@@ -2,6 +2,7 @@ services:
   uploads:
     image: ghcr.io/meower-revived/uploads:latest
     hostname: uploads
+    restart: unless-stopped
     volumes:
       - /meower-data/uploads/.env:/app/.env:ro
       - /meower-data/uploads/ingest:/app/ingest  # tmpfs for good performance

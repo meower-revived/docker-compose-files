@@ -1,6 +1,7 @@
 services:
   server:
     image: ghcr.io/meower-revived/server:latest
+    restart: unless-stopped
     env_file:
       - /meower-data/server/.env
     volumes:
