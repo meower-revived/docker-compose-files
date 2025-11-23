@@ -1,0 +1,25 @@
+services:
+  clamd:
+    image: clamav/clamav:latest
+    container_name: clamd
+    restart: unless-stopped
+    user: "0:0"  # this looks bad, but clamd deprivileges to the "clamav" user after starting
+    entrypoint: ["clamd", "-c", "/etc/clamav/clamd.conf"]
+    depends_on:
+      - freshclam
+    volumes:
+      - /meower-data/clamav/clamd.conf:/etc/clamav/clamd.conf:ro
+      - /var/run/clamav:/var/run/clamav
+      - clamav_db:/var/lib/clamav
+
+  freshclam:
+    image: clamav/clamav:latest
+    container_name: freshclam
+    restart: unless-stopped
+    entrypoint: ["freshclam", "-d", "--foreground"]
+    user: "clamav:clamav"
+    volumes:
+      - clamav_db:/var/lib/clamav
+
+volumes:
+  clamav_db:
